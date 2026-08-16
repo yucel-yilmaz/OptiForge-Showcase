@@ -1,0 +1,111 @@
+{
+  "model": {
+    "id": "vehicle-job-scheduling",
+    "version": "1.0.0",
+    "kind": "scheduling",
+    "allowUnassigned": false,
+    "fieldMappings": {
+      "resourceId": "vehicle_id",
+      "resourceTags": null,
+      "resourceCapacity": null,
+      "resourceMaxTasks": null,
+      "resourceAvailability": "availability",
+      "taskId": "job_id",
+      "taskRequiredTags": null,
+      "taskDemand": null,
+      "taskStart": null,
+      "taskDuration": "window.duration",
+      "taskEarliestStart": "window.earliest_start",
+      "taskLatestEnd": "window.latest_end",
+      "taskPredecessors": "predecessors",
+      "taskDeadline": "deadline",
+      "taskSetupDuration": "setup_duration",
+      "taskCurrentResourceId": "current_resource_id",
+      "taskCurrentStart": "current_start"
+    },
+    "constraints": [
+      {
+        "type": "no_overlap"
+      },
+      {
+        "type": "availability"
+      },
+      {
+        "type": "precedence"
+      },
+      {
+        "type": "deadline"
+      },
+      {
+        "type": "setup_time"
+      }
+    ],
+    "objectives": [
+      {
+        "type": "minimize_plan_changes",
+        "weight": 1,
+        "reassignmentPenalty": 100,
+        "startShiftPenalty": 1
+      }
+    ]
+  },
+  "data": {
+    "resources": [
+      {
+        "vehicle_id": "van-1",
+        "availability": [
+          {
+            "start": 0,
+            "end": 5
+          }
+        ]
+      },
+      {
+        "vehicle_id": "van-2",
+        "availability": [
+          {
+            "start": 5,
+            "end": 10
+          }
+        ]
+      }
+    ],
+    "tasks": [
+      {
+        "job_id": "job-1",
+        "window": {
+          "earliest_start": 0,
+          "latest_end": 10,
+          "duration": 4
+        },
+        "predecessors": [],
+        "deadline": 5,
+        "setup_duration": 1,
+        "current_resource_id": "van-1",
+        "current_start": 1
+      },
+      {
+        "job_id": "job-2",
+        "window": {
+          "earliest_start": 0,
+          "latest_end": 10,
+          "duration": 4
+        },
+        "predecessors": [
+          "job-1"
+        ],
+        "deadline": 10,
+        "setup_duration": 1,
+        "current_resource_id": "van-2",
+        "current_start": 6
+      }
+    ],
+    "pairCosts": [],
+    "forbiddenPairs": []
+  },
+  "solveOptions": {
+    "timeLimitSeconds": 5,
+    "randomSeed": 0,
+    "workers": 1
+  }
+}

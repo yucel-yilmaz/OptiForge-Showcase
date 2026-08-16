@@ -1,0 +1,99 @@
+{
+  "model": {
+    "id": "production-line-scheduling",
+    "version": "1.0.0",
+    "kind": "scheduling",
+    "allowUnassigned": false,
+    "fieldMappings": {
+      "resourceId": "line_code",
+      "resourceTags": null,
+      "resourceCapacity": null,
+      "resourceMaxTasks": null,
+      "resourceAvailability": "shift_windows",
+      "taskId": "operation_code",
+      "taskRequiredTags": null,
+      "taskDemand": null,
+      "taskStart": null,
+      "taskDuration": "timing.duration",
+      "taskEarliestStart": "timing.earliest_start",
+      "taskLatestEnd": "timing.latest_end",
+      "taskPredecessors": "predecessors",
+      "taskDeadline": "deadline",
+      "taskSetupDuration": "changeover",
+      "taskCurrentResourceId": "current_line",
+      "taskCurrentStart": "current_start"
+    },
+    "constraints": [
+      { "type": "no_overlap" },
+      { "type": "availability" },
+      { "type": "precedence" },
+      { "type": "deadline" },
+      { "type": "setup_time" }
+    ],
+    "objectives": [
+      {
+        "type": "minimize_plan_changes",
+        "weight": 1,
+        "reassignmentPenalty": 100,
+        "startShiftPenalty": 10
+      }
+    ]
+  },
+  "data": {
+    "resources": [
+      {
+        "line_code": "line-a",
+        "shift_windows": [{ "start": 0, "end": 16 }]
+      },
+      {
+        "line_code": "line-b",
+        "shift_windows": [{ "start": 0, "end": 16 }]
+      }
+    ],
+    "tasks": [
+      {
+        "operation_code": "mix-base",
+        "timing": { "earliest_start": 1, "latest_end": 16, "duration": 3 },
+        "predecessors": [],
+        "deadline": 5,
+        "changeover": 1,
+        "current_line": "line-a",
+        "current_start": 1
+      },
+      {
+        "operation_code": "fill-batch",
+        "timing": { "earliest_start": 1, "latest_end": 16, "duration": 4 },
+        "predecessors": ["mix-base"],
+        "deadline": 10,
+        "changeover": 1,
+        "current_line": "line-a",
+        "current_start": 5
+      },
+      {
+        "operation_code": "label-batch",
+        "timing": { "earliest_start": 1, "latest_end": 16, "duration": 2 },
+        "predecessors": ["fill-batch"],
+        "deadline": 13,
+        "changeover": 1,
+        "current_line": "line-b",
+        "current_start": 10
+      },
+      {
+        "operation_code": "quality-release",
+        "timing": { "earliest_start": 1, "latest_end": 16, "duration": 2 },
+        "predecessors": ["label-batch"],
+        "deadline": 16,
+        "changeover": 1,
+        "current_line": "line-b",
+        "current_start": 13
+      }
+    ],
+    "pairCosts": [],
+    "forbiddenPairs": []
+  },
+  "solveOptions": {
+    "timeLimitSeconds": 5,
+    "randomSeed": 0,
+    "workers": 1
+  }
+}

@@ -1,0 +1,16 @@
+name: Example or feature request
+description: Suggest a new synthetic use case or developer-experience improvement.
+title: "[Request]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Explain the operational decision or integration friction.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested approach

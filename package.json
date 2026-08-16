@@ -1,0 +1,36 @@
+{
+  "name": "optiforge-showcase",
+  "version": "0.1.0",
+  "description": "Public examples and a zero-dependency JavaScript client for OptiForge decision APIs.",
+  "type": "module",
+  "private": true,
+  "license": "Apache-2.0",
+  "keywords": [
+    "optimization",
+    "operations-research",
+    "decision-api",
+    "scheduling",
+    "assignment"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "example": "node examples/solve-field-service.mjs",
+    "test": "node --test",
+    "check": "node --check src/index.js && node --check examples/solve-field-service.mjs && node --test",
+    "pack:dry-run": "npm pack --dry-run"
+  }
+}

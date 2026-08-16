@@ -1,0 +1,85 @@
+{
+  "model": {
+    "id": "field-service-assignment",
+    "version": "1.0.0",
+    "kind": "assignment",
+    "allowUnassigned": false,
+    "fieldMappings": {
+      "resourceId": "employee_id",
+      "resourceTags": "profile.skills",
+      "resourceCapacity": "limits.daily_capacity",
+      "resourceMaxTasks": "limits.max_jobs",
+      "taskId": "job_id",
+      "taskRequiredTags": "requirements.skills",
+      "taskDemand": "effort"
+    },
+    "constraints": [
+      { "type": "required_tags" },
+      { "type": "capacity" },
+      { "type": "max_tasks" },
+      { "type": "forbidden_pairs" }
+    ],
+    "objectives": [
+      { "type": "minimize_pair_cost", "weight": 1 },
+      { "type": "balance_load", "weight": 2 }
+    ]
+  },
+  "data": {
+    "resources": [
+      {
+        "employee_id": "alice",
+        "profile": {
+          "skills": ["electrical", "hvac"]
+        },
+        "limits": {
+          "daily_capacity": 8,
+          "max_jobs": 2
+        }
+      },
+      {
+        "employee_id": "bob",
+        "profile": {
+          "skills": ["plumbing"]
+        },
+        "limits": {
+          "daily_capacity": 8,
+          "max_jobs": 2
+        }
+      }
+    ],
+    "tasks": [
+      {
+        "job_id": "job-1",
+        "requirements": {
+          "skills": ["electrical"]
+        },
+        "effort": 4
+      },
+      {
+        "job_id": "job-2",
+        "requirements": {
+          "skills": ["plumbing"]
+        },
+        "effort": 3
+      }
+    ],
+    "pairCosts": [
+      {
+        "resourceId": "alice",
+        "taskId": "job-1",
+        "cost": 2
+      },
+      {
+        "resourceId": "bob",
+        "taskId": "job-2",
+        "cost": 1
+      }
+    ],
+    "forbiddenPairs": []
+  },
+  "solveOptions": {
+    "timeLimitSeconds": 5,
+    "randomSeed": 0,
+    "workers": 1
+  }
+}

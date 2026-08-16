@@ -1,0 +1,84 @@
+{
+  "model": {
+    "id": "community-care-assignment",
+    "version": "1.0.0",
+    "kind": "assignment",
+    "allowUnassigned": false,
+    "fieldMappings": {
+      "resourceId": "team_code",
+      "resourceTags": "clinical.skills",
+      "resourceCapacity": "day.capacity_points",
+      "resourceMaxTasks": "day.max_visits",
+      "taskId": "visit_code",
+      "taskRequiredTags": "care.required_skills",
+      "taskDemand": "care.effort_points"
+    },
+    "constraints": [
+      { "type": "required_tags" },
+      { "type": "capacity" },
+      { "type": "max_tasks" },
+      { "type": "forbidden_pairs" }
+    ],
+    "objectives": [
+      { "type": "minimize_pair_cost", "weight": 1 },
+      { "type": "balance_load", "weight": 3 }
+    ]
+  },
+  "data": {
+    "resources": [
+      {
+        "team_code": "team-north",
+        "clinical": { "skills": ["wound", "chronic"] },
+        "day": { "capacity_points": 8, "max_visits": 3 }
+      },
+      {
+        "team_code": "team-central",
+        "clinical": { "skills": ["pediatric", "chronic"] },
+        "day": { "capacity_points": 8, "max_visits": 3 }
+      },
+      {
+        "team_code": "team-south",
+        "clinical": { "skills": ["rehab", "wound"] },
+        "day": { "capacity_points": 7, "max_visits": 3 }
+      }
+    ],
+    "tasks": [
+      {
+        "visit_code": "home-wound-dressing",
+        "care": { "required_skills": ["wound"], "effort_points": 3 }
+      },
+      {
+        "visit_code": "pediatric-follow-up",
+        "care": { "required_skills": ["pediatric"], "effort_points": 2 }
+      },
+      {
+        "visit_code": "diabetes-setup",
+        "care": { "required_skills": ["chronic"], "effort_points": 2 }
+      },
+      {
+        "visit_code": "post-op-mobility",
+        "care": { "required_skills": ["rehab"], "effort_points": 3 }
+      },
+      {
+        "visit_code": "pressure-ulcer-check",
+        "care": { "required_skills": ["wound"], "effort_points": 3 }
+      }
+    ],
+    "pairCosts": [
+      { "resourceId": "team-north", "taskId": "home-wound-dressing", "cost": 1 },
+      { "resourceId": "team-south", "taskId": "home-wound-dressing", "cost": 4 },
+      { "resourceId": "team-central", "taskId": "pediatric-follow-up", "cost": 1 },
+      { "resourceId": "team-north", "taskId": "diabetes-setup", "cost": 2 },
+      { "resourceId": "team-central", "taskId": "diabetes-setup", "cost": 1 },
+      { "resourceId": "team-south", "taskId": "post-op-mobility", "cost": 1 },
+      { "resourceId": "team-north", "taskId": "pressure-ulcer-check", "cost": 3 },
+      { "resourceId": "team-south", "taskId": "pressure-ulcer-check", "cost": 1 }
+    ],
+    "forbiddenPairs": []
+  },
+  "solveOptions": {
+    "timeLimitSeconds": 5,
+    "randomSeed": 0,
+    "workers": 1
+  }
+}
